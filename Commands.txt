@@ -1,3 +1,9 @@
+--Run generator--
+
+python Generator/Client/generator.py \
+    --project_id <PROJECT_ID> \
+    --topic_name <INPUT_PUBSUB_TOPIC>
+
 --Run dataflow from local--
 
 python edem_dataflow_streaming.py \
@@ -21,8 +27,7 @@ python edem_dataflow_streaming.py \
     --temp_location gs://<YOUR_PROJECT_ID>/tmp \
     --staging_location gs://<YOUR_PROJECT_ID/stg
 
---Run generator--
+-- Get schema from biq query --
 
-python Generator/Client/generator.py \
-    --project_id <PROJECT_ID> \
-    --topic_name <INPUT_PUBSUB_TOPIC>
+bq show --schema --format=prettyjson <PROJECT_ID>:<DATASET>.<TABLE> 
+> ./myschema.json

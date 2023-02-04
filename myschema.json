@@ -1,0 +1,27 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "Producto_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "Nombre",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "Max_temp",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "Min_temp",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "Last_date",
+    "type": "STRING"
+  }
+]
