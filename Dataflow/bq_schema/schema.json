@@ -2,28 +2,28 @@
     "fields":[
       {
         "mode": "NULLABLE",
-        "name": "Producto_id",
+        "name": "Rfid_id",
         "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "Nombre",
-        "type": "STRING"
-      },
-      {
-        "mode": "NULLABLE",
-        "name": "Max_temp",
+        "name": "Product_id",
         "type": "INTEGER"
       },
       {
         "mode": "NULLABLE",
-        "name": "Min_temp",
-        "type": "INTEGER"
+        "name": "Name",
+        "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "Last_date",
+        "name": "Timestamp",
         "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "Temp_now",
+        "type": "FLOAT"
       }
     ]
 }
