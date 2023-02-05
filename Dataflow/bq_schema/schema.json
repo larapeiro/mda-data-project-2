@@ -2,13 +2,13 @@
     "fields":[
       {
         "mode": "NULLABLE",
-        "name": "Rfid_id",
-        "type": "STRING"
+        "name": "Product_id",
+        "type": "INTEGER"
       },
       {
         "mode": "NULLABLE",
-        "name": "Product_id",
-        "type": "INTEGER"
+        "name": "Rfid_id",
+        "type": "STRING"
       },
       {
         "mode": "NULLABLE",
@@ -17,13 +17,18 @@
       },
       {
         "mode": "NULLABLE",
-        "name": "Timestamp",
+        "name": "Temp_now",
+        "type": "FLOAT"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "Measurement_time",
         "type": "STRING"
       },
       {
         "mode": "NULLABLE",
-        "name": "Temp_now",
-        "type": "FLOAT"
+        "name": "Processing_time",
+        "type": "STRING"
       }
     ]
 }

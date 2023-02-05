@@ -1,33 +1,24 @@
---Run generator--
-
-python Generator/Client/generator.py \
-    --project_id <PROJECT_ID> \
-    --topic_name <INPUT_PUBSUB_TOPIC>
-
---Run dataflow from local--
-
-python edem_dataflow_streaming.py \
-    --project_id <PROJECT_ID> \
-    --hostname <HOSTNAME> \
-    --input_subscription <INPUT_PUBSUB_SUBSCRIPTION> \
-    --output_topic <OUTPUT_PUBSUB_TOPIC> \
-    --output_bigquery <DATASET>.<TABLE>
-
---Run pipeline in GCP--
-
-python edem_dataflow_streaming.py \
-    --project_id <PROJECT_ID> \
-    --hostname <HOSTNAME> \
-    --input_subscription <INPUT_PUBSUB_SUBSCRIPTION> \
-    --output_topic <OUTPUT_PUBSUB_TOPIC> \
-    --output_bigquery <DATASET>.<TABLE> \
-    --runner DataflowRunner \
-    --job_name <YOUR_DATAFLOW_JOB> \
-    --region <GCP_REGION> \
-    --temp_location gs://<YOUR_PROJECT_ID>/tmp \
-    --staging_location gs://<YOUR_PROJECT_ID/stg
-
 -- Get schema from biq query --
 
 bq show --schema --format=prettyjson <PROJECT_ID>:<DATASET>.<TABLE> 
 > ./myschema.json
+
+python dataflow.py \
+    --project_id e2e-serverless-edem \
+    --input_subscription rfid_input-sub \
+    --output_topic admin_output \
+    --output_bigquery iot_data.rfid_data \
+    --runner DataflowRunner \
+    --job_name dpdataflowjob \
+    --region europe-west1 \
+    --temp_location gs://dataprojectbucket/tmp \
+    --staging_location gs://dataprojectbucket/stg
+
+    api 
+
+    https://retoolapi.dev/bS4fGR/p_db
+
+   GET /bS4fGR/p_db
+   POST /bS4fGR/p_db
+   PUT /bS4fGR/p_db
+   DELETE /bS4fGR/p_db

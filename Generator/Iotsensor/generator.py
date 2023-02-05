@@ -5,6 +5,7 @@ import time
 import random
 import logging
 import argparse
+import requests
 import google.auth
 from datetime import datetime
 from google.cloud import pubsub_v1
@@ -36,12 +37,12 @@ class PubSubMessages:
         json_str = json.dumps(message)
         topic_path = self.publisher.topic_path(self.project_id, self.topic_name)
         publish_future = self.publisher.publish(topic_path, json_str.encode("utf-8"))
-        logging.info("New data has been registered for %s", message['Product_id'])
+        logging.info("New data has been registered for %s rfid:", message['rfid_id'])
 
     def __exit__(self):
         self.publisher.transport.close()
         logging.info("PubSub Client closed.")
-            
+
 rfid = ['pF8z9GBG', 'XsEOhUOT', '89x5FhyA', 'S3yG1alL', '5pz386iG']
 products = ['cerdo','conejo','ternera','cordero','pollo']
 
@@ -59,9 +60,9 @@ def temperaturaRandom():
 def product():
 
     rfid_id = random.choice(rfid)
-    product_id = rfid.index(rfid_id)
+    product_id = int(rfid.index(rfid_id)+1)
     product_name = products[product_id-1]
-    timestamp = str(datetime.now())
+    measurement_time = str(datetime.now())
     temp_now = round(temperaturaRandom(),2)
     
     #Return values
@@ -69,7 +70,7 @@ def product():
         "Rfid_id" : rfid_id,
         "Product_id": product_id,
         "Name": product_name,
-        "Timestamp": timestamp,
+        "Measurement_time": measurement_time,
         "Temp_now": temp_now
         }
 
@@ -87,6 +88,9 @@ def run_generator(project_id, topic_name):
     finally:
         pubsub_class.__exit__()
 
+
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.INFO)
-    run_generator(args.project_id, args.topic_name)
+    #run_generator(args.project_id, args.topic_name)
+    run_generator()
+
