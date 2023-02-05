@@ -35,6 +35,17 @@ class AddTimestampDoFn(beam.DoFn):
         #return function
         yield element
 
+# DoFn 05 : Output data formatting
+class OutputFormatDoFn(beam.DoFn):
+    """ Set a specific format for the output data."""
+    #Add process function
+    def process(self, element):
+        #Send a notification with the best-selling product_id in each window
+        output_msg = {"ProcessingTime": str(datetime.now()), "message": f"was the best-selling product."}
+        #Convert the json to the proper pubsub format
+        output_json = json.dumps(output_msg)
+        yield output_json.encode('utf-8')
+
 """ Dataflow Process """
 def run():
 
@@ -47,7 +58,7 @@ def run():
                     help='GCP cloud project name')
     parser.add_argument(
                     '--hostname',
-                    required=True,
+                    required=False,
                     help='API Hostname provided during the session.')
     parser.add_argument(
                     '--input_subscription',
@@ -90,23 +101,32 @@ def run():
             p 
                 | "Read From PubSub" >> beam.io.ReadFromPubSub(topic=args.input_subscription)
                 # Parse JSON messages with Map Function
-                | "Parse JSON messages" >> beam.Map(ParsePubSubMessage).with_output_types(CommonLog)
+                | "Parse JSON messages" >> beam.Map(ParsePubSubMessage)
                 # Adding Processing timestamp
                 | "Add Processing Time" >> beam.ParDo(AddTimestampDoFn())
         )
         
         """ Part 02: Writing data to BigQuery"""
-        data = (
+        (
             data | "Write to BigQuery" >> beam.io.WriteToBigQuery(
                 table = f"{args.project_id}:{args.output_bigquery}",
                 schema = schema,
                 create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-                write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE
+                write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
             )
         )
+        
+        """ Part 03:"""
 
-    if __name__ == '__main__':
-        #Add Logs
-        logging.getLogger().setLevel(logging.INFO)
-        #Run process
-        run()
+        (
+            data 
+                | "OutputFormat" >> beam.ParDo(OutputFormatDoFn())
+                # Write notification to PubSub Topic
+                | "Send Push Notification" >> beam.io.WriteToPubSub(topic=f"projects/{args.project_id}/topics/{args.output_topic}", with_attributes=False)
+        )
+
+if __name__ == '__main__':
+    #Add Logs
+    logging.getLogger().setLevel(logging.INFO)
+    #Run process
+    run()
